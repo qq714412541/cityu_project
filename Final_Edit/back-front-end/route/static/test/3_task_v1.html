@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="mystyle3.1.css">
+
+
+
+
+<ul>
+  <li><a class="active" href="./1_navigation.html">Home</a></li>
+  <li><a href="./2_contact.html">Contact Us</a></li>
+  <li><a href="./3_task.html">Predict</a></li>
+  <li><a href="#" onclick="api()">Result</a></li>
+  
+  
+</ul>
+<meta charset="utf-8">
+<title>Prediction-Task</title>
+<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="ajax方式">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+		function api() {
+		
+		
+		    var formData = new FormData();
+
+		            $.ajax({
+		            //几个参数需要注意一下
+		                type: "GET",//方法类型
+		                
+		                url: "http://127.0.0.1:5000/check_result" ,//url
+						data: formData,
+		                processData : false, // 使数据不做处理
+		                contentType : false, // 不要设置Content-Type请求头
+		                success: function (result) {
+		                console.log(result);//打印服务端返回的数据(调试用)
+		
+		                //alert("SUCCESS");
+		                if (result["code"] == 0	){
+		                    alert("Success! Check Results.")
+		                    parent.document.location.href = "./templates/"+result["path"];
+		                }
+		
+		                else{
+		                    alert("Something is wrong!")
+		                }
+		                //
+		
+		                ;
+		                },
+		                error : function() {
+		                    alert("异常！");
+		                }
+		                
+		                
+		            })
+		
+		        }
+	
+	
+	
+	
+	
+	
+	
+	
+        function logon() {
+
+
+            var formData = new FormData();
+
+            formData.append("file",$('#crowd_file')[0].files[0]);
+
+
+			
+                    $.ajax({
+                    //几个参数需要注意一下
+                        type: "POST",//方法类型
+                        
+                        url: "http://127.0.0.1:5000/task_recieve" ,//url
+						data: formData,
+                        processData : false, // 使数据不做处理
+                        contentType : false, // 不要设置Content-Type请求头
+                        success: function (result) {
+                        console.log(result);//打印服务端返回的数据(调试用)
+
+                        //alert("SUCCESS");
+                        if (result["code"] == 0	){
+                            alert("Success! Check Results.")
+                            parent.document.location.href = "./templates/"+result["reportPath"];
+                        }else if(result["code"] ==10004){
+                            alert("Type of File is Wrong!")
+                        }else if(result["code"] ==10002){
+                            alert("Style of data is Wrong!")
+                        }else if(result["code"] ==10003){
+                            alert("There is no file!")
+                        }else if(result["code"] ==10001){
+                            alert("Date is wrong!")
+                        }
+
+                        else{
+                            alert("Something is wrong!")
+                        }
+                        //
+
+                        ;
+                        },
+                        error : function() {
+                            alert("异常！");
+                        }
+                        
+                        
+                    })
+
+                }
+
+    </script>
+</head>
+<body>
+	<h2>Please Upload Current Data</h2>
+	<form id="form1" onsubmit="return false" action="##" method="post">
+	        <p><input type="file" value="Upload" id="crowd_file" style="background: #3d83fa;color: #fefefe;font-family:Microsoft YaHei" >
+			
+			<p><input type="submit" value="Run" style="background: #3d83fa;color: #fefefe;font-family:Microsoft YaHei"onclick="logon()"></p>
+	    </form>
+
+
+
+</body>
+</html>

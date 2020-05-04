@@ -1,0 +1,62 @@
+<head>
+<ul>
+  <li><a class="active" href="./1_navigation.html">Home</a></li>
+  <li><a href="./2_contact.html">Contact Us</a></li>
+  <li><a href="./3_task.html">Predict</a></li>
+  <li><a href="#" onclick="logon()">Result</a></li>
+  
+  
+</ul>
+<script type="text/javascript">
+        function logon() {
+
+
+            var formData = new FormData();
+
+            formData.append("file",$('#crowd_file')[0].files[0]);
+
+
+			
+                    $.ajax({
+                    //几个参数需要注意一下
+                        type: "POST",//方法类型
+                        
+                        url: "http://127.0.0.1:5000/task_recieve" ,//url
+						data: formData,
+                        processData : false, // 使数据不做处理
+                        contentType : false, // 不要设置Content-Type请求头
+                        success: function (result) {
+                        console.log(result);//打印服务端返回的数据(调试用)
+
+                        //alert("SUCCESS");
+                        if (result["code"] == 0	){
+                            alert("Success! Check Results.")
+                            parent.document.location.href = "./templates/"+result["reportPath"];
+                        }else if(result["code"] ==10004){
+                            alert("Type of File is Wrong!")
+                        }else if(result["code"] ==10002){
+                            alert("Style of data is Wrong!")
+                        }else if(result["code"] ==10003){
+                            alert("There is no file!")
+                        }else if(result["code"] ==10001){
+                            alert("Date is wrong!")
+                        }
+
+                        else{
+                            alert("Something is wrong!")
+                        }
+                        //
+
+                        ;
+                        },
+                        error : function() {
+                            alert("异常！");
+                        }
+                        
+                        
+                    })
+
+                }
+
+    </script>
+	</head>
